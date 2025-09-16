@@ -21,7 +21,6 @@ export default function Home() {
         setImages(JSON.parse(storedImages));
       } else {
         setImages(initialImages);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialImages));
       }
     } catch (error) {
       console.error("Failed to access localStorage", error);
@@ -29,27 +28,28 @@ export default function Home() {
     }
     setIsMounted(true);
   }, []);
-
+  
   const memoriesAdded = images.filter(img => !img.imageUrl.startsWith('https://picsum.photos')).length;
 
   const handleAddMemory = (newImage: { imageUrl: string }) => {
     setImages(prevImages => {
-      const newImages = [...prevImages];
-      const nextIndex = memoriesAdded;
-      if (nextIndex < initialImages.length) {
-        newImages[nextIndex] = {
-          id: `memory-${Date.now()}`,
-          imageUrl: newImage.imageUrl,
-          description: 'A new memory',
-          imageHint: 'custom memory',
-        };
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newImages));
-      }
-      return newImages;
+        const newImages = [...prevImages];
+        const placeholderIndex = prevImages.findIndex(img => img.imageUrl.startsWith('https://picsum.photos'));
+        
+        if (placeholderIndex !== -1) {
+            newImages[placeholderIndex] = {
+                id: `memory-${Date.now()}`,
+                imageUrl: newImage.imageUrl,
+                description: 'A new memory',
+                imageHint: 'custom memory',
+            };
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newImages));
+        }
+        return newImages;
     });
   };
   
-  const showAddMemory = memoriesAdded < initialImages.length;
+  const showAddMemory = images.some(img => img.imageUrl.startsWith('https://picsum.photos'));
   
   if (!isMounted) {
     return null; // or a loading spinner
@@ -88,7 +88,7 @@ export default function Home() {
           </section>
 
           <footer className="mt-16 text-muted-foreground text-sm">
-            <p>Your Man, Tristan</p>
+            <p>Your Man,<br/>Tristan Jay</p>
           </footer>
         </div>
       </main>
