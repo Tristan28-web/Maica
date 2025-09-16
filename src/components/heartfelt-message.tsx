@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Gift, Mail } from 'lucide-react';
-import { ScrollArea } from './ui/scroll-area';
 
 type HeartfeltMessageProps = {
   name: string;
@@ -35,7 +34,7 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
           <p className="mt-4 text-lg font-semibold text-muted-foreground">A special message for you</p>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl">
+      <DialogContent className="sm:max-w-2xl flex flex-col max-h-[80vh]">
         <DialogHeader>
           <div className="flex items-center gap-3">
             <Mail className="w-6 h-6 text-primary" />
@@ -45,10 +44,10 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
             A few words to celebrate your special day.
           </DialogDescription>
         </DialogHeader>
-        <div className="max-h-[50vh] overflow-y-auto pr-4">
-            <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
-              {heartfeltMessage}
-            </p>
+        <div className="overflow-y-auto pr-4 flex-grow">
+          <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
+            {heartfeltMessage}
+          </p>
         </div>
       </DialogContent>
     </Dialog>
