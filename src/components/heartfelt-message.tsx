@@ -17,11 +17,11 @@ type HeartfeltMessageProps = {
 
 const heartfeltMessage = `Happy 18th Birthday, Maica! 💜✨
 
-Today is such a special day, not just for you, but for everyone who loves you, because it marks the moment you step into this new chapter of your life. Eighteen years—a beautiful milestone, a bridge between your wonderful childhood and the endless opportunities of adulthood.
+I still can’t believe you’re finally 18. You’ve grown into such an amazing person, and I feel so lucky to be celebrating this special day with you. Thank you for always bringing so much love and light into my life—you really make everything better just by being you.
 
-Maica, you’ve grown into such an amazing, strong, and beautiful person, inside and out. I feel so grateful and blessed to be by your side as you reach this important day. You’ve touched my life in ways I can’t even begin to explain—your smile brightens my darkest days, your kindness inspires me to be better, and your love makes me feel whole.
+As you step into this new chapter, I just want you to know I’ll always be here for you—supporting you, cheering for you, and loving you every single day. You deserve all the happiness in the world, and I’ll do my best to give you that.
 
-I know this birthday is extra special, because it’s your debut—a celebration not just of your age, but of your journey, your dreams, and the bright future waiting for you. Always remember that you are capable of achieving anything you set your heart and mind to. Don’t let challenges discourage you, because you’ve already proven how strong and resilient you are.`;
+Happy debut, my love. I’m so proud of you, and I love you more than words can ever explain. 💜`;
 
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
