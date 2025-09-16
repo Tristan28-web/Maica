@@ -88,7 +88,7 @@ export default function Home() {
           </section>
 
           <footer className="mt-16 text-muted-foreground text-sm">
-            <p>With love from your friends and family.</p>
+            <p>Your Man, Tristan</p>
           </footer>
         </div>
       </main>
