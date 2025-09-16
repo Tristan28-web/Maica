@@ -3,16 +3,20 @@ import {
   Card,
   CardContent,
 } from '@/components/ui/card';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
+import type { ImagePlaceholder } from '@/lib/placeholder-images';
 
-export default function PhotoGallery() {
-  if (!PlaceHolderImages.length) {
+type PhotoGalleryProps = {
+  images: ImagePlaceholder[];
+};
+
+export default function PhotoGallery({ images }: PhotoGalleryProps) {
+  if (!images || images.length === 0) {
     return <p className="text-muted-foreground">The memory book is still empty.</p>;
   }
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      {PlaceHolderImages.map((image) => (
+      {images.map((image) => (
         <Card key={image.id} className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 border-2 border-transparent hover:border-accent">
           <CardContent className="p-0 relative">
             <div className="aspect-[4/3] bg-muted">

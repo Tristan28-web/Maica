@@ -4,12 +4,17 @@ import { useState, useEffect } from 'react';
 import CountdownTimer from '@/components/countdown-timer';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
+import { AddMemoryForm } from '@/components/add-memory-form';
 import { Flower2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const [isBirthday, setIsBirthday] = useState(false);
   const [targetDate, setTargetDate] = useState<Date | null>(null);
+  const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
+  const [showAddMemory, setShowAddMemory] = useState(true);
 
   useEffect(() => {
     const now = new Date();
@@ -36,6 +41,18 @@ export default function Home() {
 
   const handleCountdownComplete = () => {
     setIsBirthday(true);
+  };
+
+  const handleAddMemory = (newMemory: { imageUrl: string; description: string }) => {
+    setImages(prevImages => [
+      ...prevImages,
+      {
+        id: `new-memory-${Date.now()}`,
+        imageHint: 'custom memory',
+        ...newMemory,
+      },
+    ]);
+    setShowAddMemory(false);
   };
 
   return (
@@ -76,8 +93,15 @@ export default function Home() {
           ) : null}
 
           <section className="animate-in fade-in delay-300 duration-700">
-            <h2 className="text-3xl sm:text-4xl font-headline mb-8">A Gallery of Memories</h2>
-            <PhotoGallery />
+            <div className="flex justify-between items-center mb-8">
+              <h2 className="text-3xl sm:text-4xl font-headline">A Gallery of Memories</h2>
+              {showAddMemory && (
+                 <AddMemoryForm onAddMemory={handleAddMemory}>
+                    <Button>Add Your Memory</Button>
+                 </AddMemoryForm>
+              )}
+            </div>
+            <PhotoGallery images={images} />
           </section>
 
           <footer className="mt-16 text-muted-foreground text-sm">
