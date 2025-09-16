@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
 import { HeartfeltMessage } from '@/components/heartfelt-message';
@@ -8,27 +8,52 @@ import { Flower2 } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
 import { AddMemoryForm } from '@/components/add-memory-form';
 
+const LOCAL_STORAGE_KEY = 'maica-birthday-images';
+
 export default function Home() {
-  const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
-  const [memoriesAdded, setMemoriesAdded] = useState(0);
+  const [images, setImages] = useState<ImagePlaceholder[]>([]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    try {
+      const storedImages = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (storedImages) {
+        setImages(JSON.parse(storedImages));
+      } else {
+        setImages(initialImages);
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialImages));
+      }
+    } catch (error) {
+      console.error("Failed to access localStorage", error);
+      setImages(initialImages);
+    }
+    setIsMounted(true);
+  }, []);
+
+  const memoriesAdded = images.filter(img => !img.imageUrl.startsWith('https://picsum.photos')).length;
 
   const handleAddMemory = (newImage: { imageUrl: string }) => {
     setImages(prevImages => {
       const newImages = [...prevImages];
-      if (memoriesAdded < initialImages.length) {
-        newImages[memoriesAdded] = {
+      const nextIndex = memoriesAdded;
+      if (nextIndex < initialImages.length) {
+        newImages[nextIndex] = {
           id: `memory-${Date.now()}`,
           imageUrl: newImage.imageUrl,
           description: 'A new memory',
           imageHint: 'custom memory',
         };
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newImages));
       }
       return newImages;
     });
-    setMemoriesAdded(prev => prev + 1);
   };
   
   const showAddMemory = memoriesAdded < initialImages.length;
+  
+  if (!isMounted) {
+    return null; // or a loading spinner
+  }
 
   return (
     <>
