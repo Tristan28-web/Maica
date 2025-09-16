@@ -12,13 +12,13 @@ export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
   const [showAddMemory, setShowAddMemory] = useState(true);
 
-  const handleAddMemory = (newImage: { imageUrl: string; description: string }) => {
+  const handleAddMemory = (newImage: { imageUrl: string }) => {
     setImages(prevImages => [
       ...prevImages,
       {
         id: `memory-${Date.now()}`,
         imageUrl: newImage.imageUrl,
-        description: newImage.description,
+        description: 'A new memory',
         imageHint: 'custom memory',
       },
     ]);

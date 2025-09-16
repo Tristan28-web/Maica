@@ -15,17 +15,15 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Loader2, PlusCircle } from 'lucide-react';
 
 const memorySchema = z.object({
   image: z.any().refine(files => files?.length === 1, 'Image is required.'),
-  description: z.string().min(1, 'A message is required.'),
 });
 
 type AddMemoryFormProps = {
-  onAddMemory: (newImage: { imageUrl: string; description: string }) => void;
+  onAddMemory: (newImage: { imageUrl: string }) => void;
 };
 
 export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
@@ -34,9 +32,6 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
 
   const form = useForm<z.infer<typeof memorySchema>>({
     resolver: zodResolver(memorySchema),
-    defaultValues: {
-      description: '',
-    },
   });
 
   const onSubmit = (values: z.infer<typeof memorySchema>) => {
@@ -46,7 +41,6 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
     reader.onload = () => {
       const newMemory = {
         imageUrl: reader.result as string,
-        description: values.description,
       };
       onAddMemory(newMemory);
       setIsSubmitting(false);
@@ -82,7 +76,7 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
         <DialogHeader>
           <DialogTitle>Add a New Memory</DialogTitle>
           <DialogDescription>
-            Upload a photo and write a message to share a special moment.
+            Upload a photo to share a special moment.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -98,23 +92,6 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
                       type="file" 
                       accept="image/*"
                       onChange={e => field.onChange(e.target.files)}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Message</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Your heartfelt message for Maica..."
-                      className="resize-y min-h-[120px]"
-                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
