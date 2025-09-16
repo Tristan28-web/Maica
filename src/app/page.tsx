@@ -95,7 +95,7 @@ export default function Home() {
           <section className="animate-in fade-in delay-300 duration-700">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-headline">A Gallery of Memories</h2>
-              {showAddMemory && (
+              {isBirthday && showAddMemory && (
                  <AddMemoryForm onAddMemory={handleAddMemory}>
                     <Button>Add Your Memory</Button>
                  </AddMemoryForm>

@@ -85,13 +85,14 @@ export function AddMemoryForm({ children, onAddMemory }: AddMemoryFormProps) {
               </div>
             )}
             <div className="grid w-full gap-1.5">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">Message</Label>
               <Textarea
                 id="description"
-                placeholder="Your message for Maica..."
+                placeholder="Your essay for Maica..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
+                className="min-h-[120px]"
               />
             </div>
           </div>
