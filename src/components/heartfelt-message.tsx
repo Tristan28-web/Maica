@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -11,40 +10,22 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Gift, Mail } from 'lucide-react';
-import { generateHeartfeltMessage } from '@/ai/flows/heartfelt-message-flow';
 import { ScrollArea } from './ui/scroll-area';
-import { Skeleton } from './ui/skeleton';
 
 type HeartfeltMessageProps = {
   name: string;
 };
 
+const heartfeltMessage = `Happy 18th Birthday, Maica! 💜✨
+
+Today is such a special day, not just for you, but for everyone who loves you, because it marks the moment you step into this new chapter of your life. Eighteen years—a beautiful milestone, a bridge between your wonderful childhood and the endless opportunities of adulthood.
+
+Maica, you’ve grown into such an amazing, strong, and beautiful person, inside and out. I feel so grateful and blessed to be by your side as you reach this important day. You’ve touched my life in ways I can’t even begin to explain—your smile brightens my darkest days, your kindness inspires me to be better, and your love makes me feel whole.
+
+I know this birthday is extra special, because it’s your debut—a celebration not just of your age, but of your journey, your dreams, and the bright future waiting for you. Always remember that you are capable of achieving anything you set your heart and mind to. Don’t let challenges discourage you, because you’ve already proven how strong and resilient you are.`;
+
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleOpen = async () => {
-    if (message) {
-      setIsOpen(true);
-      return;
-    }
-
-    setIsLoading(true);
-    setError('');
-    try {
-      const result = await generateHeartfeltMessage({ name });
-      setMessage(result.message);
-      setIsOpen(true);
-    } catch (err) {
-      setError('Sorry, I couldn\'t write a message right now. Please try again in a moment.');
-      // You could optionally open the dialog to show the error
-      // setIsOpen(true);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -52,7 +33,6 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
         <div className="flex flex-col items-center justify-center cursor-pointer group">
           <Gift className="w-24 h-24 sm:w-32 sm:h-32 text-primary transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />
           <p className="mt-4 text-lg font-semibold text-muted-foreground">A special message for you</p>
-          {error && <p className="mt-2 text-sm text-destructive">{error}</p>}
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-2xl max-h-[80vh] flex flex-col">
@@ -67,20 +47,9 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
         </DialogHeader>
         <ScrollArea className="flex-1 -mx-6 px-6">
           <div className="py-4 text-left">
-            {isLoading ? (
-              <div className="space-y-4">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-5/6" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                 <Skeleton className="h-4 w-3/4" />
-              </div>
-            ) : (
-              <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
-                {message}
-              </p>
-            )}
+            <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
+              {heartfeltMessage}
+            </p>
           </div>
         </ScrollArea>
       </DialogContent>
