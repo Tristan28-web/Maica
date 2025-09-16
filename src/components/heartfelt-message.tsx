@@ -35,7 +35,7 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
           <p className="mt-4 text-lg font-semibold text-muted-foreground">A special message for you</p>
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-2xl max-h-[80vh] flex flex-col">
+      <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
           <div className="flex items-center gap-3">
             <Mail className="w-6 h-6 text-primary" />
@@ -45,13 +45,11 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
             A few words to celebrate your special day.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex-1 -mx-6 px-6">
-          <div className="py-4 text-left">
+        <div className="max-h-[50vh] overflow-y-auto pr-4">
             <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
               {heartfeltMessage}
             </p>
-          </div>
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );
