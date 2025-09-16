@@ -1,14 +1,29 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
 import { HeartfeltMessage } from '@/components/heartfelt-message';
-import { Flower2 } from 'lucide-react';
+import { Flower2, PlusCircle } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
+import { AddMemoryForm } from '@/components/add-memory-form';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
+  const [showAddMemory, setShowAddMemory] = useState(true);
+
+  const handleAddMemory = (newImage: { imageUrl: string; description: string }) => {
+    setImages(prevImages => [
+      ...prevImages,
+      {
+        id: `memory-${Date.now()}`,
+        imageUrl: newImage.imageUrl,
+        description: newImage.description,
+        imageHint: 'custom memory',
+      },
+    ]);
+    setShowAddMemory(false);
+  };
 
   return (
     <>
@@ -35,6 +50,9 @@ export default function Home() {
           <section className="animate-in fade-in delay-300 duration-700">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-headline">A Gallery of Memories</h2>
+              {showAddMemory && (
+                 <AddMemoryForm onAddMemory={handleAddMemory} />
+              )}
             </div>
             <PhotoGallery images={images} />
           </section>
