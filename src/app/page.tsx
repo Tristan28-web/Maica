@@ -4,26 +4,31 @@ import { useState } from 'react';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
 import { HeartfeltMessage } from '@/components/heartfelt-message';
-import { Flower2, PlusCircle } from 'lucide-react';
+import { Flower2 } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
 import { AddMemoryForm } from '@/components/add-memory-form';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
-  const [showAddMemory, setShowAddMemory] = useState(true);
+  const [memoriesAdded, setMemoriesAdded] = useState(0);
 
   const handleAddMemory = (newImage: { imageUrl: string }) => {
-    setImages(prevImages => [
-      ...prevImages,
-      {
-        id: `memory-${Date.now()}`,
-        imageUrl: newImage.imageUrl,
-        description: 'A new memory',
-        imageHint: 'custom memory',
-      },
-    ]);
-    setShowAddMemory(false);
+    setImages(prevImages => {
+      const newImages = [...prevImages];
+      if (memoriesAdded < initialImages.length) {
+        newImages[memoriesAdded] = {
+          id: `memory-${Date.now()}`,
+          imageUrl: newImage.imageUrl,
+          description: 'A new memory',
+          imageHint: 'custom memory',
+        };
+      }
+      return newImages;
+    });
+    setMemoriesAdded(prev => prev + 1);
   };
+  
+  const showAddMemory = memoriesAdded < initialImages.length;
 
   return (
     <>
