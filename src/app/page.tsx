@@ -29,8 +29,6 @@ export default function Home() {
     setIsMounted(true);
   }, []);
   
-  const memoriesAdded = images.filter(img => !img.imageUrl.startsWith('https://picsum.photos')).length;
-
   const handleAddMemory = (newImage: { imageUrl: string }) => {
     setImages(prevImages => {
         const newImages = [...prevImages];
@@ -77,7 +75,7 @@ export default function Home() {
             <HeartfeltMessage name="Maica" />
           </section>
 
-          <section className="animate-in fade-in delay-300 duration-700">
+          <section className="animate-in fade-in delay-300 duration-700 my-16">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
               {showAddMemory && (
@@ -87,9 +85,6 @@ export default function Home() {
             <PhotoGallery images={images} />
           </section>
 
-          <footer className="mt-16 text-muted-foreground text-sm">
-            <p>Your Man,<br/>Tristan Jay</p>
-          </footer>
         </div>
       </main>
     </>
