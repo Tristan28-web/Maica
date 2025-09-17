@@ -9,9 +9,9 @@ export async function GET() {
     const [rows] = await connection.query('SELECT id, image_url as imageUrl, description, image_hint as imageHint FROM memories ORDER BY created_at DESC');
     connection.release();
     return NextResponse.json(rows);
-  } catch (error) {
+  } catch (error: any) {
     console.error('GET /api/memories error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -34,8 +34,8 @@ export async function POST(request: Request) {
     const insertId = (result as any).insertId;
 
     return NextResponse.json({ id: insertId, imageUrl, description, imageHint }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('POST /api/memories error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
