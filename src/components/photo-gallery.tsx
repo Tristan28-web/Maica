@@ -37,8 +37,8 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
                     <Image
                       src={image.imageUrl}
                       alt={image.description}
-                      width={675}
-                      height={1200}
+                      width={4000}
+                      height={6000}
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       data-ai-hint={image.imageHint}
                     />
