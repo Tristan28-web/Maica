@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -8,81 +9,51 @@ import { Flower2 } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
 import { AddMemoryForm } from '@/components/add-memory-form';
 import { useToast } from '@/hooks/use-toast';
-
-const LOCAL_STORAGE_KEY_IMAGES = 'maica-birthday-images';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
-  const [isMounted, setIsMounted] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
-  const [storageError, setStorageError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (storageError) {
-      toast({
-        variant: 'destructive',
-        title: 'Storage Full',
-        description: storageError,
-      });
-      setStorageError(null);
-    }
-  }, [storageError, toast]);
-
-  useEffect(() => {
-    setIsMounted(true);
-    try {
-      // For this change, we will clear the local storage to ensure the new placeholder shows up.
-      localStorage.removeItem(LOCAL_STORAGE_KEY_IMAGES);
-      setImages(initialImages);
-    } catch (error) {
-      console.error("Failed to access localStorage", error);
-      setImages(initialImages);
-    }
-  }, []);
+    const fetchMemories = async () => {
+      try {
+        const response = await fetch('/api/memories');
+        if (!response.ok) {
+          throw new Error('Failed to fetch memories.');
+        }
+        const memories = await response.json();
+        setImages(memories.length > 0 ? memories : initialImages);
+      } catch (error) {
+        console.error(error);
+        toast({
+          variant: 'destructive',
+          title: 'Could not load memories',
+          description: 'There was a problem connecting to the database. Displaying default image.',
+        });
+        setImages(initialImages);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchMemories();
+  }, [toast]);
   
-  const handleAddMemory = (newImage: { imageUrl: string }) => {
+  const handleAddMemory = (newImage: ImagePlaceholder) => {
+    // Optimistically update the UI
     setImages(prevImages => {
-        const newImages = [...prevImages];
-        const placeholderIndex = prevImages.findIndex(img => img.imageUrl.startsWith('https://picsum.photos'));
-        
-        const imageToUpdateIndex = placeholderIndex !== -1 ? placeholderIndex : 0;
-
-        if (newImages.length > 0) {
-            newImages[imageToUpdateIndex] = {
-                ...newImages[imageToUpdateIndex],
-                imageUrl: newImage.imageUrl,
-                description: 'A new memory',
-                imageHint: 'custom memory',
-            };
-        } else {
-            newImages.push({
-                id: `memory-${Date.now()}`,
-                imageUrl: newImage.imageUrl,
-                description: 'A new memory',
-                imageHint: 'custom memory',
-            });
-        }
-        
-        try {
-          localStorage.setItem(LOCAL_STORAGE_KEY_IMAGES, JSON.stringify(newImages));
-        } catch (error) {
-            if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
-                setStorageError("Your browser's local storage is full. This new memory will only be saved for this session.");
-            } else {
-                console.error("Failed to save images to localStorage", error);
-                setStorageError("Could not save the new memory to your browser's storage.");
-            }
-        }
-        return newImages;
+      const newImages = [...prevImages];
+      const placeholderIndex = prevImages.findIndex(img => img.imageUrl.startsWith('https://picsum.photos'));
+      const imageToUpdateIndex = placeholderIndex !== -1 ? placeholderIndex : 0;
+      if (newImages.length > 0) {
+        newImages[imageToUpdateIndex] = newImage;
+      } else {
+        newImages.push(newImage);
+      }
+      return newImages;
     });
   };
-  
-  const showAddMemory = isMounted && (!images.length || images.some(img => img.imageUrl.startsWith('https://picsum.photos')));
-
-  
-  if (!isMounted) {
-    return null; // or a loading spinner
-  }
 
   return (
     <>
@@ -109,13 +80,20 @@ export default function Home() {
           <section className="animate-in fade-in delay-300 duration-700 my-16">
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
-              {showAddMemory && (
-                 <AddMemoryForm onAddMemory={handleAddMemory} />
-              )}
+              <AddMemoryForm onAddMemory={handleAddMemory} />
             </div>
-            <PhotoGallery images={images} />
+            {isLoading ? (
+              <div className="flex justify-center">
+                 <div className="overflow-hidden w-full max-w-lg">
+                    <div className="aspect-[9/16] bg-muted">
+                        <Skeleton className="w-full h-full" />
+                    </div>
+                </div>
+              </div>
+            ) : (
+              <PhotoGallery images={images} />
+            )}
           </section>
-
         </div>
       </main>
     </>
