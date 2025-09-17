@@ -18,7 +18,7 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
 
   return (
     <div className="flex justify-center">
-      <Card className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 border-8 border-accent w-full max-w-3xl">
+      <Card className="overflow-hidden group hover:shadow-xl transition-shadow duration-300 border-8 border-accent w-full max-w-5xl">
         <CardContent className="p-0 relative">
           <div className="aspect-[16/9] bg-muted">
             <Image
