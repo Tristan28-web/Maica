@@ -40,9 +40,12 @@ export default function Home() {
           </section>
 
           <section className="animate-in fade-in delay-300 duration-700 my-16">
-             <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
-            </div>
+             <div className="mb-8 text-center">
+  <h2 className="text-3xl sm:text-4xl font-headline">
+    A Treasure of Memories
+  </h2>
+</div>
+
             <PhotoGallery images={images} />
           </section>
 
