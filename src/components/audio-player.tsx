@@ -20,7 +20,7 @@ export default function AudioPlayer() {
   };
 
   // The audio will not play until you add your mp3 file.
-  // 1. Add your song (e.g., "little-things.mp3") to the `public` folder in your project.
+  // 1. Add your song (e.g., "little-things.mp3") to the `public/audio` folder in your project.
   // 2. The `src` below will then correctly point to your song.
   return (
     <Card className="max-w-md mx-auto">
@@ -36,7 +36,7 @@ export default function AudioPlayer() {
       <CardContent className="flex flex-col items-center justify-center">
         <audio 
             ref={audioRef} 
-            src="/little-things.mp3" 
+            src="/audio/little-things.mp3" 
             onEnded={() => setIsPlaying(false)}
             preload="auto"
         />
