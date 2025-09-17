@@ -15,7 +15,18 @@ export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const { toast } = useToast();
+  const [storageError, setStorageError] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (storageError) {
+      toast({
+        variant: 'destructive',
+        title: 'Storage Full',
+        description: storageError,
+      });
+      setStorageError(null);
+    }
+  }, [storageError, toast]);
 
   useEffect(() => {
     setIsMounted(true);
@@ -56,18 +67,10 @@ export default function Home() {
           localStorage.setItem(LOCAL_STORAGE_KEY_IMAGES, JSON.stringify(newImages));
         } catch (error) {
             if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
-                toast({
-                    variant: 'destructive',
-                    title: 'Storage Full',
-                    description: "Your browser's local storage is full. This new memory will only be saved for this session.",
-                });
+                setStorageError("Your browser's local storage is full. This new memory will only be saved for this session.");
             } else {
                 console.error("Failed to save images to localStorage", error);
-                toast({
-                    variant: 'destructive',
-                    title: 'Save Failed',
-                    description: "Could not save the new memory to your browser's storage.",
-                });
+                setStorageError("Could not save the new memory to your browser's storage.");
             }
         }
         return newImages;
