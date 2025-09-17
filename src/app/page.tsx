@@ -10,7 +10,8 @@ import { AddMemoryForm } from '@/components/add-memory-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 
-const LOCAL_STORAGE_KEY = 'maica-birthday-images';
+const LOCAL_STORAGE_KEY_IMAGES = 'maica-birthday-images';
+const LOCAL_STORAGE_KEY_AUDIO = 'maica-birthday-audio';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
@@ -19,18 +20,23 @@ export default function Home() {
 
 
   useEffect(() => {
+    setIsMounted(true);
     try {
-      const storedImages = localStorage.getItem(LOCAL_STORAGE_KEY);
+      const storedImages = localStorage.getItem(LOCAL_STORAGE_KEY_IMAGES);
       if (storedImages) {
         setImages(JSON.parse(storedImages));
       } else {
         setImages(initialImages);
       }
+
+      const storedAudio = localStorage.getItem(LOCAL_STORAGE_KEY_AUDIO);
+      if (storedAudio) {
+        setAudioSrc(storedAudio);
+      }
     } catch (error) {
       console.error("Failed to access localStorage", error);
       setImages(initialImages);
     }
-    setIsMounted(true);
   }, []);
   
   const handleAddMemory = (newImage: { imageUrl: string }) => {
@@ -45,7 +51,11 @@ export default function Home() {
                 description: 'A new memory',
                 imageHint: 'custom memory',
             };
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(newImages));
+            try {
+              localStorage.setItem(LOCAL_STORAGE_KEY_IMAGES, JSON.stringify(newImages));
+            } catch (error) {
+              console.error("Failed to save images to localStorage", error);
+            }
         }
         return newImages;
     });
@@ -56,7 +66,13 @@ export default function Home() {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setAudioSrc(e.target?.result as string);
+        const result = e.target?.result as string;
+        setAudioSrc(result);
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY_AUDIO, result);
+        } catch (error) {
+          console.error("Failed to save audio to localStorage", error);
+        }
       };
       reader.readAsDataURL(file);
     }
@@ -87,15 +103,17 @@ export default function Home() {
           </header>
 
           <section className="my-16 animate-in fade-in delay-200 duration-700">
-             <div className="flex flex-col items-center justify-center gap-4 mb-8">
-              <div className="grid w-full max-w-sm items-center gap-1.5">
-                <Label htmlFor="music" className="flex items-center justify-center gap-2 text-muted-foreground">
-                  <Music className="w-4 h-4" />
-                  Upload a special song (MP3)
-                </Label>
-                <Input id="music" type="file" accept="audio/mpeg" onChange={handleAudioUpload} className="cursor-pointer"/>
-              </div>
-            </div>
+             {!audioSrc && (
+                <div className="flex flex-col items-center justify-center gap-4 mb-8">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <Label htmlFor="music" className="flex items-center justify-center gap-2 text-muted-foreground">
+                      <Music className="w-4 h-4" />
+                      Upload a special song (MP3)
+                    </Label>
+                    <Input id="music" type="file" accept="audio/mpeg" onChange={handleAudioUpload} className="cursor-pointer"/>
+                  </div>
+                </div>
+              )}
             <HeartfeltMessage name="Maica" audioSrc={audioSrc}/>
           </section>
 

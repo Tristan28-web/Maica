@@ -30,19 +30,23 @@ export function HeartfeltMessage({ name, audioSrc }: HeartfeltMessageProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (isOpen && audioSrc) {
-      if (!audioRef.current) {
-        audioRef.current = new Audio(audioSrc);
-        audioRef.current.loop = true;
-      } else {
-        audioRef.current.src = audioSrc;
+    // Initialize audio element only on the client side
+    if (typeof window !== 'undefined' && !audioRef.current) {
+      audioRef.current = new Audio();
+      audioRef.current.loop = true;
+    }
+
+    const audio = audioRef.current;
+
+    if (isOpen && audio && audioSrc) {
+      if (audio.src !== audioSrc) {
+        audio.src = audioSrc;
       }
-      // Attempt to play, catching any errors for browser policy restrictions
-      audioRef.current.play().catch(error => {
+      audio.play().catch(error => {
         console.error("Audio playback failed:", error);
       });
-    } else if (audioRef.current) {
-      audioRef.current.pause();
+    } else if (audio) {
+      audio.pause();
     }
   }, [isOpen, audioSrc]);
 
@@ -52,6 +56,7 @@ export function HeartfeltMessage({ name, audioSrc }: HeartfeltMessageProps) {
     return () => {
       if (audio) {
         audio.pause();
+        audio.src = '';
       }
     };
   }, []);
