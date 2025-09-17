@@ -29,9 +29,8 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (open) {
+  useEffect(() => {
+    if (isOpen) {
       audioRef.current?.play().catch(error => console.error("Audio play failed", error));
     } else {
       if (audioRef.current) {
@@ -39,10 +38,10 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
         audioRef.current.currentTime = 0;
       }
     }
-  };
+  }, [isOpen]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div className="flex flex-col items-center justify-center cursor-pointer group">
           <Gift className="w-24 h-24 sm:w-32 sm:h-32 text-primary transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />
@@ -68,8 +67,8 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
             <p>Your Man,</p>
             <p>Tristan Jay</p>
         </div>
+        <audio ref={audioRef} src={audioUrl} loop preload="auto" />
       </DialogContent>
-      <audio ref={audioRef} src={audioUrl} loop preload="auto" />
     </Dialog>
   );
 }
