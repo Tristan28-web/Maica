@@ -4,15 +4,19 @@ import { useState, useEffect } from 'react';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
 import { HeartfeltMessage } from '@/components/heartfelt-message';
-import { Flower2 } from 'lucide-react';
+import { Flower2, Music } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
 import { AddMemoryForm } from '@/components/add-memory-form';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 const LOCAL_STORAGE_KEY = 'maica-birthday-images';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
   const [isMounted, setIsMounted] = useState(false);
+  const [audioSrc, setAudioSrc] = useState<string | null>(null);
+
 
   useEffect(() => {
     try {
@@ -46,6 +50,17 @@ export default function Home() {
         return newImages;
     });
   };
+
+  const handleAudioUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAudioSrc(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   
   const showAddMemory = images.some(img => img.imageUrl.startsWith('https://picsum.photos'));
   
@@ -72,7 +87,16 @@ export default function Home() {
           </header>
 
           <section className="my-16 animate-in fade-in delay-200 duration-700">
-            <HeartfeltMessage name="Maica" />
+             <div className="flex flex-col items-center justify-center gap-4 mb-8">
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="music" className="flex items-center justify-center gap-2 text-muted-foreground">
+                  <Music className="w-4 h-4" />
+                  Upload a special song (MP3)
+                </Label>
+                <Input id="music" type="file" accept="audio/mpeg" onChange={handleAudioUpload} className="cursor-pointer"/>
+              </div>
+            </div>
+            <HeartfeltMessage name="Maica" audioSrc={audioSrc}/>
           </section>
 
           <section className="animate-in fade-in delay-300 duration-700 my-16">

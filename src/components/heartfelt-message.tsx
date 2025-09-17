@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,7 @@ import { Gift, Mail } from 'lucide-react';
 
 type HeartfeltMessageProps = {
   name: string;
+  audioSrc: string | null;
 };
 
 const heartfeltMessage = `Happy 18th Birthday, Maica! 💜✨
@@ -24,8 +25,36 @@ As you step into this new chapter, I just want you to know I’ll always be here
 
 Happy debut, my love. I’m so proud of you, and I love you more than words can ever explain. 💜`;
 
-export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
+export function HeartfeltMessage({ name, audioSrc }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    if (isOpen && audioSrc) {
+      if (!audioRef.current) {
+        audioRef.current = new Audio(audioSrc);
+        audioRef.current.loop = true;
+      } else {
+        audioRef.current.src = audioSrc;
+      }
+      // Attempt to play, catching any errors for browser policy restrictions
+      audioRef.current.play().catch(error => {
+        console.error("Audio playback failed:", error);
+      });
+    } else if (audioRef.current) {
+      audioRef.current.pause();
+    }
+  }, [isOpen, audioSrc]);
+
+  // Cleanup audio on component unmount
+  useEffect(() => {
+    const audio = audioRef.current;
+    return () => {
+      if (audio) {
+        audio.pause();
+      }
+    };
+  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
