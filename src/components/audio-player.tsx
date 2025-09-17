@@ -21,18 +21,19 @@ export default function AudioPlayer() {
       try {
         const response = await fetch('/api/audio');
         if (!response.ok) {
-          throw new Error('Failed to fetch audio.');
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch audio.');
         }
         const audio = await response.json();
         if (audio) {
           setAudioUrl(audio.audioUrl);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         toast({
           variant: 'destructive',
           title: 'Could not load audio',
-          description: 'There was a problem connecting to the database.',
+          description: error.message || 'There was a problem connecting to the database.',
         });
       } finally {
         setIsLoading(false);
