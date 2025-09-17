@@ -33,7 +33,7 @@ export default function AudioPlayer() {
               </div>
           </div>
       </CardHeader>
-      <CardContent className="flex flex-col items-center justify-center">
+      <CardContent className="flex flex-col items-center justify-center p-6">
         <audio 
             ref={audioRef} 
             src="/audio/little-things.mp3" 
