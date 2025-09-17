@@ -3,61 +3,61 @@
     {
       "id": "maica-1",
       "description": "Celebrating the little moments.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-1/675/1200",
+      "imageUrl": "/images/maica-1.jpg",
       "imageHint": "couple happy"
     },
     {
       "id": "maica-2",
       "description": "A day to remember.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-2/675/1200",
+      "imageUrl": "/images/maica-2.jpg",
       "imageHint": "couple smiling"
     },
     {
       "id": "maica-3",
       "description": "Adventures together.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-3/675/1200",
+      "imageUrl": "/images/maica-3.jpg",
       "imageHint": "couple nature"
     },
     {
       "id": "maica-4",
       "description": "Another year of joy.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-4/675/1200",
+      "imageUrl": "/images/maica-4.jpg",
       "imageHint": "couple laughing"
     },
     {
       "id": "maica-5",
       "description": "Sharing a sweet moment.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-5/675/1200",
+      "imageUrl": "/images/maica-5.jpg",
       "imageHint": "couple embrace"
     },
     {
       "id": "maica-6",
       "description": "Lost in the moment.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-6/675/1200",
+      "imageUrl": "/images/maica-6.jpg",
       "imageHint": "couple romantic"
     },
     {
       "id": "maica-7",
       "description": "A journey of love.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-7/675/1200",
+      "imageUrl": "/images/maica-7.jpg",
       "imageHint": "couple adventure"
     },
     {
       "id": "maica-8",
       "description": "Forever and always.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-8/675/1200",
+      "imageUrl": "/images/maica-8.jpg",
       "imageHint": "couple holding hands"
     },
     {
       "id": "maica-9",
       "description": "My favorite person.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-9/675/1200",
+      "imageUrl": "/images/maica-9.jpg",
       "imageHint": "couple portrait"
     },
     {
       "id": "maica-10",
       "description": "Happy memories.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday-10/675/1200",
+      "imageUrl": "/images/maica-10.jpg",
       "imageHint": "couple celebrating"
     }
   ]

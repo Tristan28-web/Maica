@@ -14,7 +14,7 @@ type PhotoGalleryProps = {
 
 export default function PhotoGallery({ images }: PhotoGalleryProps) {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
+    Autoplay({ delay: 2000, stopOnInteraction: false, stopOnHover: false })
   )
 
   if (!images || images.length === 0) {
@@ -37,7 +37,8 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
                     <Image
                       src={image.imageUrl}
                       alt={image.description}
-                      fill
+                      width={675}
+                      height={1200}
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                       data-ai-hint={image.imageHint}
                     />
