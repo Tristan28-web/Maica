@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -14,7 +14,6 @@ import { Gift, Mail } from 'lucide-react';
 
 type HeartfeltMessageProps = {
   name: string;
-  audioSrc: string | null;
 };
 
 const heartfeltMessage = `Happy 18th Birthday, Maica! 💜✨
@@ -25,41 +24,8 @@ As you step into this new chapter, I just want you to know I’ll always be here
 
 Happy debut, my love. I’m so proud of you, and I love you more than words can ever explain. 💜`;
 
-export function HeartfeltMessage({ name, audioSrc }: HeartfeltMessageProps) {
+export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    // Initialize audio element only on the client side
-    if (typeof window !== 'undefined' && !audioRef.current) {
-      audioRef.current = new Audio();
-      audioRef.current.loop = true;
-    }
-
-    const audio = audioRef.current;
-
-    if (isOpen && audio && audioSrc) {
-      if (audio.src !== audioSrc) {
-        audio.src = audioSrc;
-      }
-      audio.play().catch(error => {
-        console.error("Audio playback failed:", error);
-      });
-    } else if (audio) {
-      audio.pause();
-    }
-  }, [isOpen, audioSrc]);
-
-  // Cleanup audio on component unmount
-  useEffect(() => {
-    const audio = audioRef.current;
-    return () => {
-      if (audio) {
-        audio.pause();
-        audio.src = '';
-      }
-    };
-  }, []);
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
