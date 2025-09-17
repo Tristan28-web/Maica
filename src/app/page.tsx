@@ -22,16 +22,17 @@ export default function Home() {
       try {
         const response = await fetch('/api/memories');
         if (!response.ok) {
-          throw new Error('Failed to fetch memories.');
+           const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch memories.');
         }
         const memories = await response.json();
         setImages(memories.length > 0 ? memories : initialImages);
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
         toast({
           variant: 'destructive',
           title: 'Could not load memories',
-          description: 'There was a problem connecting to the database. Displaying default image.',
+          description: error.message || 'There was a problem connecting to the database. Displaying default images.',
         });
         setImages(initialImages);
       } finally {
