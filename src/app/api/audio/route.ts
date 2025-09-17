@@ -10,9 +10,9 @@ export async function GET() {
     connection.release();
     const audio = (rows as any)[0] || null;
     return NextResponse.json(audio);
-  } catch (error) {
+  } catch (error: any) {
     console.error('GET /api/audio error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
 
@@ -37,8 +37,8 @@ export async function POST(request: Request) {
     const insertId = (result as any).insertId;
 
     return NextResponse.json({ id: insertId, audioUrl }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('POST /api/audio error:', error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json({ message: error.message || 'Internal Server Error' }, { status: 500 });
   }
 }
