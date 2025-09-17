@@ -24,10 +24,10 @@ export default function AudioPlayer() {
   // 2. The `src` below will then correctly point to your song.
   return (
     <Card className="max-w-md mx-auto">
-      <CardHeader className="text-left">
-          <div className="flex items-center gap-4">
-              <Music className="w-6 h-6 text-primary" />
-              <div>
+      <CardHeader>
+          <div className="flex flex-col items-center gap-2">
+              <Music className="w-8 h-8 text-primary" />
+              <div className="text-center">
                 <CardTitle>Little Things</CardTitle>
                 <CardDescription>One Direction</CardDescription>
               </div>
