@@ -29,6 +29,7 @@ type AddMemoryFormProps = {
   onAddMemory: (newImage: ImagePlaceholder) => void;
 };
 
+// This component is currently not used, but is kept for future use.
 export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -46,31 +47,20 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
     reader.readAsDataURL(file);
     reader.onload = async () => {
       const imageUrl = reader.result as string;
-      const newMemoryData = {
+      const newMemoryData: ImagePlaceholder = {
+        id: `local-${Date.now()}`,
         imageUrl,
         description: 'A new memory from a friend',
         imageHint: 'uploaded memory',
       };
       
       try {
-        const response = await fetch('/api/memories', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newMemoryData),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to save memory to the database.');
-        }
-        
-        const savedMemory = await response.json();
-
-        onAddMemory(savedMemory);
+        // Here you would typically send the data to a server
+        // For now, we just update the local state.
+        onAddMemory(newMemoryData);
         toast({
-          title: 'Memory Saved!',
-          description: 'Your special moment has been added to the collection.',
+          title: 'Memory Added!',
+          description: 'Your special moment has been added for this session.',
         });
 
         setIsOpen(false);
@@ -80,7 +70,7 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
         toast({
           variant: 'destructive',
           title: 'Upload Failed',
-          description: 'Could not save your memory. Please try again later.',
+          description: 'Could not add your memory. Please try again later.',
         });
       } finally {
         setIsSubmitting(false);
@@ -117,7 +107,7 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
         <DialogHeader>
           <DialogTitle>Add a New Memory</DialogTitle>
           <DialogDescription>
-            Upload a photo to share a special moment.
+            Upload a photo to share a special moment. This will only be stored for your current session.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -147,7 +137,7 @@ export function AddMemoryForm({ onAddMemory }: AddMemoryFormProps) {
                     Saving...
                   </>
                 ) : (
-                  'Save Memory'
+                  'Add Memory'
                 )}
               </Button>
             </DialogFooter>

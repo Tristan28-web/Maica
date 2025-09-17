@@ -13,48 +13,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import AudioPlayer from '@/components/audio-player';
 
 export default function Home() {
-  const [images, setImages] = useState<ImagePlaceholder[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    const fetchMemories = async () => {
-      try {
-        const response = await fetch('/api/memories');
-        if (!response.ok) {
-           const errorData = await response.json();
-          throw new Error(errorData.message || 'Failed to fetch memories.');
-        }
-        const memories = await response.json();
-        setImages(memories.length > 0 ? memories : initialImages);
-      } catch (error: any) {
-        console.error(error);
-        toast({
-          variant: 'destructive',
-          title: 'Could not load memories',
-          description: error.message || 'There was a problem connecting to the database. Displaying default images.',
-        });
-        setImages(initialImages);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchMemories();
-  }, [toast]);
+  const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleAddMemory = (newImage: ImagePlaceholder) => {
-    // Optimistically update the UI
-    setImages(prevImages => {
-      const newImages = [...prevImages];
-      const placeholderIndex = prevImages.findIndex(img => img.imageUrl.startsWith('https://picsum.photos'));
-      const imageToUpdateIndex = placeholderIndex !== -1 ? placeholderIndex : 0;
-      if (newImages.length > 0) {
-        newImages[imageToUpdateIndex] = newImage;
-      } else {
-        newImages.push(newImage);
-      }
-      return newImages;
-    });
+    // This function can be updated in the future if a persistence mechanism is added.
+    // For now, we'll just update the state.
+    setImages([newImage, ...images.slice(1)]);
   };
 
   return (
@@ -82,7 +47,8 @@ export default function Home() {
           <section className="animate-in fade-in delay-300 duration-700 my-16">
              <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
-                <AddMemoryForm onAddMemory={handleAddMemory} />
+                {/* The AddMemoryForm can be re-enabled if a storage solution is implemented */}
+                {/* <AddMemoryForm onAddMemory={handleAddMemory} /> */}
             </div>
             {isLoading ? (
               <div className="flex justify-center">
@@ -97,10 +63,11 @@ export default function Home() {
             )}
           </section>
 
-          <section className="my-16 animate-in fade-in delay-400 duration-700">
+          {/* Audio section is removed to prevent database errors */}
+          {/* <section className="my-16 animate-in fade-in delay-400 duration-700">
              <h2 className="text-3xl sm:text-4xl font-headline mb-8">A Special Song</h2>
              <AudioPlayer />
-          </section>
+          </section> */}
         </div>
       </main>
     </>
