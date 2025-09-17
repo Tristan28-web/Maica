@@ -9,7 +9,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Gift, Mail } from 'lucide-react';
+import { Gift, Mail, Play, Pause } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 type HeartfeltMessageProps = {
   name: string;
@@ -27,18 +28,45 @@ const audioUrl = 'https://storage.googleapis.com/stedi-assets/misc/the-only-exce
 
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      audioRef.current?.play().catch(error => console.error("Audio play failed", error));
-    } else {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-      }
+    // Ensure we have an audio instance when the dialog is open
+    if (isOpen && !audioRef.current) {
+        audioRef.current = new Audio(audioUrl);
+        audioRef.current.loop = true;
+    }
+
+    // Cleanup and pause audio when dialog closes
+    if (!isOpen) {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            setIsPlaying(false);
+        }
+    }
+    
+    // Cleanup audio element on component unmount
+    return () => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
     }
   }, [isOpen]);
+
+  const togglePlayPause = () => {
+    if (audioRef.current) {
+        if (isPlaying) {
+            audioRef.current.pause();
+        } else {
+            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
+        }
+        setIsPlaying(!isPlaying);
+    }
+  };
+
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -67,7 +95,12 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
             <p>Your Man,</p>
             <p>Tristan Jay</p>
         </div>
-        <audio ref={audioRef} src={audioUrl} loop preload="auto" />
+        <div className="flex justify-center items-center mt-4">
+            <Button onClick={togglePlayPause} variant="outline" size="icon">
+                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                <span className="sr-only">{isPlaying ? 'Pause music' : 'Play music'}</span>
+            </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
