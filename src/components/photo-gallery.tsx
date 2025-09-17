@@ -6,12 +6,17 @@ import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
+import Autoplay from "embla-carousel-autoplay";
 
 type PhotoGalleryProps = {
   images: ImagePlaceholder[];
 };
 
 export default function PhotoGallery({ images }: PhotoGalleryProps) {
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  )
+
   if (!images || images.length === 0) {
     return <p className="text-muted-foreground">The memory book is still empty.</p>;
   }
@@ -19,8 +24,11 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
   return (
     <div className="flex justify-center">
       <Carousel 
+        plugins={[plugin.current]}
         className="w-full max-w-lg" 
         opts={{ loop: true }}
+        onMouseEnter={plugin.current.stop}
+        onMouseLeave={plugin.current.reset}
       >
         <CarouselContent>
           {images.map((image) => (
