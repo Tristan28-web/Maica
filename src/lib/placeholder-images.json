@@ -23,6 +23,42 @@
       "description": "Another year of joy.",
       "imageUrl": "https://picsum.photos/seed/maica-bday-4/675/1200",
       "imageHint": "couple laughing"
+    },
+    {
+      "id": "maica-5",
+      "description": "Sharing a sweet moment.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-5/675/1200",
+      "imageHint": "couple embrace"
+    },
+    {
+      "id": "maica-6",
+      "description": "Lost in the moment.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-6/675/1200",
+      "imageHint": "couple romantic"
+    },
+    {
+      "id": "maica-7",
+      "description": "A journey of love.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-7/675/1200",
+      "imageHint": "couple adventure"
+    },
+    {
+      "id": "maica-8",
+      "description": "Forever and always.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-8/675/1200",
+      "imageHint": "couple holding hands"
+    },
+    {
+      "id": "maica-9",
+      "description": "My favorite person.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-9/675/1200",
+      "imageHint": "couple portrait"
+    },
+    {
+      "id": "maica-10",
+      "description": "Happy memories.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-10/675/1200",
+      "imageHint": "couple celebrating"
     }
   ]
 }
