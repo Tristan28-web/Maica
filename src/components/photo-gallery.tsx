@@ -39,7 +39,7 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
                       alt={image.description}
                       width={4000}
                       height={6000}
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       data-ai-hint={image.imageHint}
                     />
                   </div>
