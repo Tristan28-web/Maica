@@ -1,3 +1,7 @@
+
+"use client"
+
+import React from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
@@ -11,10 +15,13 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
   if (!images || images.length === 0) {
     return <p className="text-muted-foreground">The memory book is still empty.</p>;
   }
-
+  
   return (
     <div className="flex justify-center">
-      <Carousel className="w-full max-w-lg" opts={{ loop: true }}>
+      <Carousel 
+        className="w-full max-w-lg" 
+        opts={{ loop: true }}
+      >
         <CarouselContent>
           {images.map((image) => (
             <CarouselItem key={image.id}>
