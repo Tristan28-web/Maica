@@ -4,7 +4,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 import type { ImagePlaceholder } from '@/lib/placeholder-images';
 import Autoplay from "embla-carousel-autoplay";
 
@@ -14,7 +14,7 @@ type PhotoGalleryProps = {
 
 export default function PhotoGallery({ images }: PhotoGalleryProps) {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 2000, stopOnInteraction: false })
   )
 
   if (!images || images.length === 0) {
@@ -27,8 +27,6 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
         plugins={[plugin.current]}
         className="w-full max-w-lg" 
         opts={{ loop: true }}
-        onMouseEnter={plugin.current.stop}
-        onMouseLeave={plugin.current.reset}
       >
         <CarouselContent>
           {images.map((image) => (
@@ -49,8 +47,6 @@ export default function PhotoGallery({ images }: PhotoGalleryProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
       </Carousel>
     </div>
   );
