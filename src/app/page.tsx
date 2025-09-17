@@ -10,6 +10,7 @@ import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib
 import { AddMemoryForm } from '@/components/add-memory-form';
 import { useToast } from '@/hooks/use-toast';
 import { Skeleton } from '@/components/ui/skeleton';
+import AudioPlayer from '@/components/audio-player';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
@@ -78,9 +79,9 @@ export default function Home() {
           </section>
 
           <section className="animate-in fade-in delay-300 duration-700 my-16">
-            <div className="flex justify-between items-center mb-8">
-              <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
-              <AddMemoryForm onAddMemory={handleAddMemory} />
+             <div className="flex justify-between items-center mb-8">
+                <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
+                <AddMemoryForm onAddMemory={handleAddMemory} />
             </div>
             {isLoading ? (
               <div className="flex justify-center">
@@ -93,6 +94,11 @@ export default function Home() {
             ) : (
               <PhotoGallery images={images} />
             )}
+          </section>
+
+          <section className="my-16 animate-in fade-in delay-400 duration-700">
+             <h2 className="text-3xl sm:text-4xl font-headline mb-8">A Special Song</h2>
+             <AudioPlayer />
           </section>
         </div>
       </main>
