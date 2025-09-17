@@ -27,15 +27,7 @@ const audioUrl = 'https://storage.googleapis.com/stedi-assets/misc/the-only-exce
 
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    // Pre-create the audio element
-    if (!audioRef.current) {
-        audioRef.current = new Audio(audioUrl);
-        audioRef.current.loop = true;
-    }
-  }, []);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const handleOpenChange = (open: boolean) => {
     setIsOpen(open);
@@ -77,6 +69,7 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
             <p>Tristan Jay</p>
         </div>
       </DialogContent>
+      <audio ref={audioRef} src={audioUrl} loop preload="auto" />
     </Dialog>
   );
 }
