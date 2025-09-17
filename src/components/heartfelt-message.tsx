@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
@@ -32,38 +33,47 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Ensure we have an audio instance when the dialog is open
-    if (isOpen && !audioRef.current) {
+    if (isOpen) {
+      if (!audioRef.current) {
         audioRef.current = new Audio(audioUrl);
         audioRef.current.loop = true;
+      }
     }
 
-    // Cleanup and pause audio when dialog closes
+    const handleDialogClose = () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        setIsPlaying(false);
+      }
+    };
+    
     if (!isOpen) {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current.currentTime = 0;
-            setIsPlaying(false);
-        }
+      handleDialogClose();
     }
     
-    // Cleanup audio element on component unmount
     return () => {
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
-        }
-    }
+      // Cleanup audio element on component unmount
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
   }, [isOpen]);
 
   const togglePlayPause = () => {
     if (audioRef.current) {
-        if (isPlaying) {
-            audioRef.current.pause();
-        } else {
-            audioRef.current.play().catch(e => console.error("Audio play failed:", e));
-        }
-        setIsPlaying(!isPlaying);
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(e => {
+          console.error("Audio play failed:", e);
+          // Fallback for browsers with strict autoplay policies
+          // This shouldn't be needed with a user-initiated click, but it's a safe fallback.
+          alert("Could not play audio. Please try again.");
+        });
+      }
+      setIsPlaying(!isPlaying);
     }
   };
 
