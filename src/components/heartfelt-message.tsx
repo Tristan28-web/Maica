@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -23,11 +23,34 @@ As you step into this new chapter, I just want you to know I’ll always be here
 
 Happy debut, my love. I’m so proud of you, and I love you more than words can ever explain. 💜`;
 
+const audioUrl = 'https://storage.googleapis.com/stedi-assets/misc/the-only-exception-chorus.mp3';
+
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    // Pre-create the audio element
+    if (!audioRef.current) {
+        audioRef.current = new Audio(audioUrl);
+        audioRef.current.loop = true;
+    }
+  }, []);
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (open) {
+      audioRef.current?.play().catch(error => console.error("Audio play failed", error));
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    }
+  };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <div className="flex flex-col items-center justify-center cursor-pointer group">
           <Gift className="w-24 h-24 sm:w-32 sm:h-32 text-primary transition-transform duration-300 group-hover:scale-110" strokeWidth={1.5} />
@@ -48,6 +71,10 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
           <p className="whitespace-pre-wrap font-body text-base leading-relaxed text-foreground">
             {heartfeltMessage}
           </p>
+        </div>
+        <div className="mt-4 text-center text-muted-foreground">
+            <p>Your Man,</p>
+            <p>Tristan Jay</p>
         </div>
       </DialogContent>
     </Dialog>
