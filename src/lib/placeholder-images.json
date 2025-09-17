@@ -3,38 +3,8 @@
     {
       "id": "maica-1",
       "description": "Celebrating the little moments.",
-      "imageUrl": "https://picsum.photos/seed/maica1/600/400",
-      "imageHint": "friends laughing"
-    },
-    {
-      "id": "maica-2",
-      "description": "Adventures and beautiful views.",
-      "imageUrl": "https://picsum.photos/seed/maica2/600/400",
-      "imageHint": "nature sunset"
-    },
-    {
-      "id": "maica-3",
-      "description": "Good times and crazy friends make the best memories.",
-      "imageUrl": "https://picsum.photos/seed/maica3/600/400",
-      "imageHint": "group selfie"
-    },
-    {
-      "id": "maica-4",
-      "description": "Always find a reason to smile.",
-      "imageUrl": "https://picsum.photos/seed/maica4/600/400",
-      "imageHint": "woman smiling"
-    },
-    {
-      "id": "maica-5",
-      "description": "Chasing sunsets and dreams.",
-      "imageUrl": "https://picsum.photos/seed/maica5/600/400",
-      "imageHint": "beach silhouette"
-    },
-    {
-      "id": "maica-6",
-      "description": "Here's to another year of wonderful memories.",
-      "imageUrl": "https://picsum.photos/seed/maica6/600/400",
-      "imageHint": "birthday cake"
+      "imageUrl": "https://picsum.photos/seed/maica1/1200/675",
+      "imageHint": "couple happy"
     }
   ]
 }

@@ -9,6 +9,7 @@ import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib
 import { AddMemoryForm } from '@/components/add-memory-form';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 const LOCAL_STORAGE_KEY_IMAGES = 'maica-birthday-images';
 const LOCAL_STORAGE_KEY_AUDIO = 'maica-birthday-audio';
@@ -17,6 +18,7 @@ export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>([]);
   const [isMounted, setIsMounted] = useState(false);
   const [audioSrc, setAudioSrc] = useState<string | null>(null);
+  const { toast } = useToast();
 
 
   useEffect(() => {
@@ -44,17 +46,40 @@ export default function Home() {
         const newImages = [...prevImages];
         const placeholderIndex = prevImages.findIndex(img => img.imageUrl.startsWith('https://picsum.photos'));
         
-        if (placeholderIndex !== -1) {
-            newImages[placeholderIndex] = {
-                id: `memory-${Date.now()}`,
+        const imageToUpdateIndex = placeholderIndex !== -1 ? placeholderIndex : 0;
+
+        if (newImages.length > 0) {
+            newImages[imageToUpdateIndex] = {
+                ...newImages[imageToUpdateIndex],
                 imageUrl: newImage.imageUrl,
                 description: 'A new memory',
                 imageHint: 'custom memory',
             };
-            try {
-              localStorage.setItem(LOCAL_STORAGE_KEY_IMAGES, JSON.stringify(newImages));
-            } catch (error) {
-              console.error("Failed to save images to localStorage", error);
+        } else {
+            newImages.push({
+                id: `memory-${Date.now()}`,
+                imageUrl: newImage.imageUrl,
+                description: 'A new memory',
+                imageHint: 'custom memory',
+            });
+        }
+        
+        try {
+          localStorage.setItem(LOCAL_STORAGE_KEY_IMAGES, JSON.stringify(newImages));
+        } catch (error) {
+            if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Storage Full',
+                    description: "Your browser's local storage is full. This new memory will only be saved for this session.",
+                });
+            } else {
+                console.error("Failed to save images to localStorage", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Save Failed',
+                    description: "Could not save the new memory to your browser's storage.",
+                });
             }
         }
         return newImages;
@@ -71,14 +96,28 @@ export default function Home() {
         try {
           localStorage.setItem(LOCAL_STORAGE_KEY_AUDIO, result);
         } catch (error) {
-          console.error("Failed to save audio to localStorage", error);
+           if (error instanceof DOMException && (error.name === 'QuotaExceededError' || error.name === 'NS_ERROR_DOM_QUOTA_REACHED')) {
+                toast({
+                    variant: 'destructive',
+                    title: 'Storage Full',
+                    description: "Your browser's local storage is full. The audio will only be saved for this session.",
+                });
+            } else {
+                console.error("Failed to save audio to localStorage", error);
+                toast({
+                    variant: 'destructive',
+                    title: 'Save Failed',
+                    description: "Could not save the audio to your browser's storage.",
+                });
+            }
         }
       };
       reader.readAsDataURL(file);
     }
   };
   
-  const showAddMemory = images.some(img => img.imageUrl.startsWith('https://picsum.photos'));
+  const showAddMemory = isMounted && (!images.length || images.some(img => img.imageUrl.startsWith('https://picsum.photos')));
+
   
   if (!isMounted) {
     return null; // or a loading spinner
