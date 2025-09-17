@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -10,8 +10,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Gift, Mail, Play, Pause } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Gift, Mail } from 'lucide-react';
 
 type HeartfeltMessageProps = {
   name: string;
@@ -25,58 +24,8 @@ As you step into this new chapter, I just want you to know I’ll always be here
 
 Happy debut, my love. I’m so proud of you, and I love you more than words can ever explain. 💜`;
 
-const audioUrl = 'https://storage.googleapis.com/stedi-assets/misc/the-only-exception-chorus.mp3';
-
 export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (isOpen) {
-      if (!audioRef.current) {
-        audioRef.current = new Audio(audioUrl);
-        audioRef.current.loop = true;
-      }
-    }
-
-    const handleDialogClose = () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current.currentTime = 0;
-        setIsPlaying(false);
-      }
-    };
-    
-    if (!isOpen) {
-      handleDialogClose();
-    }
-    
-    return () => {
-      // Cleanup audio element on component unmount
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, [isOpen]);
-
-  const togglePlayPause = () => {
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch(e => {
-          console.error("Audio play failed:", e);
-          // Fallback for browsers with strict autoplay policies
-          // This shouldn't be needed with a user-initiated click, but it's a safe fallback.
-          alert("Could not play audio. Please try again.");
-        });
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
-
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -104,12 +53,6 @@ export function HeartfeltMessage({ name }: HeartfeltMessageProps) {
         <div className="mt-4 text-center text-muted-foreground">
             <p>Your Man,</p>
             <p>Tristan Jay</p>
-        </div>
-        <div className="flex justify-center items-center mt-4">
-            <Button onClick={togglePlayPause} variant="outline" size="icon">
-                {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-                <span className="sr-only">{isPlaying ? 'Pause music' : 'Play music'}</span>
-            </Button>
         </div>
       </DialogContent>
     </Dialog>
