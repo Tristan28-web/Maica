@@ -3,8 +3,26 @@
     {
       "id": "maica-1",
       "description": "Celebrating the little moments.",
-      "imageUrl": "https://picsum.photos/seed/maica-bday/675/1200",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-1/675/1200",
       "imageHint": "couple happy"
+    },
+    {
+      "id": "maica-2",
+      "description": "A day to remember.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-2/675/1200",
+      "imageHint": "couple smiling"
+    },
+    {
+      "id": "maica-3",
+      "description": "Adventures together.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-3/675/1200",
+      "imageHint": "couple nature"
+    },
+    {
+      "id": "maica-4",
+      "description": "Another year of joy.",
+      "imageUrl": "https://picsum.photos/seed/maica-bday-4/675/1200",
+      "imageHint": "couple laughing"
     }
   ]
 }
