@@ -1,100 +1,57 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Music, Upload } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
-import { Input } from './ui/input';
-import { Skeleton } from './ui/skeleton';
+import { Play, Pause, Music } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from './ui/card';
 
-// This component is currently not used, but is kept for future use.
 export default function AudioPlayer() {
-  const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
-  const { toast } = useToast();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    setIsUploading(true);
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = async () => {
-      const newAudioUrl = reader.result as string;
-      setAudioUrl(newAudioUrl);
-      setIsUploading(false);
-       toast({
-          title: 'Audio Added!',
-          description: 'Your special song has been added for this session.',
-        });
-    };
-    reader.onerror = () => {
-        setIsUploading(false);
-        toast({
-          variant: 'destructive',
-          title: 'File Read Error',
-          description: 'There was an issue reading your selected file.',
-        });
-    };
+  const togglePlayPause = () => {
+    if (isPlaying) {
+      audioRef.current?.pause();
+    } else {
+      audioRef.current?.play();
+    }
+    setIsPlaying(!isPlaying);
   };
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
-  };
-
+  // The audio will not play until you add your mp3 file.
+  // 1. Add your song (e.g., "little-things.mp3") to the `public` folder in your project.
+  // 2. The `src` below will then correctly point to your song.
   return (
     <Card className="max-w-md mx-auto">
-        <CardHeader>
-            <div className="flex items-center gap-4">
-                <Music className="w-6 h-6 text-primary" />
-                <CardTitle>Play a Song</CardTitle>
-            </div>
-        </CardHeader>
-        <CardContent>
-            {isLoading ? (
-                 <div className="flex items-center space-x-4">
-                    <Skeleton className="h-12 w-12 rounded-full" />
-                    <div className="space-y-2">
-                        <Skeleton className="h-4 w-[250px]" />
-                        <Skeleton className="h-4 w-[200px]" />
-                    </div>
-                </div>
-            ) : audioUrl ? (
-                <audio controls src={audioUrl} className="w-full">
-                    Your browser does not support the audio element.
-                </audio>
-            ) : (
-                <p className="text-muted-foreground">No song has been uploaded yet.</p>
-            )}
-        </CardContent>
-        <CardFooter>
-            <Input 
-                type="file" 
-                accept="audio/*" 
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                className="hidden"
-                disabled={isUploading}
-            />
-            <Button onClick={handleUploadClick} disabled={isUploading} className="w-full">
-                {isUploading ? (
-                    <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Uploading...
-                    </>
-                ) : (
-                    <>
-                        <Upload className="mr-2 h-4 w-4" />
-                        Upload a song
-                    </>
-                )}
-            </Button>
-        </CardFooter>
+      <CardHeader className="text-left">
+          <div className="flex items-center gap-4">
+              <Music className="w-6 h-6 text-primary" />
+              <div>
+                <CardTitle>Little Things</CardTitle>
+                <CardDescription>One Direction</CardDescription>
+              </div>
+          </div>
+      </CardHeader>
+      <CardContent className="flex flex-col items-center justify-center">
+        <audio 
+            ref={audioRef} 
+            src="/little-things.mp3" 
+            onEnded={() => setIsPlaying(false)}
+            preload="auto"
+        />
+        <Button onClick={togglePlayPause} size="lg" className="w-full">
+          {isPlaying ? (
+            <>
+              <Pause className="mr-2" /> Pause
+            </>
+          ) : (
+            <>
+              <Play className="mr-2" /> Play Song
+            </>
+          )}
+        </Button>
+      </CardContent>
     </Card>
   );
 }

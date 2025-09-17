@@ -1,26 +1,16 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import PhotoGallery from '@/components/photo-gallery';
 import Confetti from '@/components/confetti';
 import { HeartfeltMessage } from '@/components/heartfelt-message';
 import { Flower2 } from 'lucide-react';
 import { type ImagePlaceholder, PlaceHolderImages as initialImages } from '@/lib/placeholder-images';
-import { AddMemoryForm } from '@/components/add-memory-form';
-import { useToast } from '@/hooks/use-toast';
-import { Skeleton } from '@/components/ui/skeleton';
 import AudioPlayer from '@/components/audio-player';
 
 export default function Home() {
   const [images, setImages] = useState<ImagePlaceholder[]>(initialImages);
-  const [isLoading, setIsLoading] = useState(false);
-  
-  const handleAddMemory = (newImage: ImagePlaceholder) => {
-    // This function can be updated in the future if a persistence mechanism is added.
-    // For now, we'll just update the state.
-    setImages([newImage, ...images.slice(1)]);
-  };
 
   return (
     <>
@@ -44,30 +34,18 @@ export default function Home() {
             <HeartfeltMessage name="Maica" />
           </section>
 
+          <section className="my-16 animate-in fade-in delay-400 duration-700">
+             <h2 className="text-3xl sm:text-4xl font-headline mb-8">A Special Song For You</h2>
+             <AudioPlayer />
+          </section>
+
           <section className="animate-in fade-in delay-300 duration-700 my-16">
              <div className="flex justify-between items-center mb-8">
                 <h2 className="text-3xl sm:text-4xl font-headline">A Treasure of Memories</h2>
-                {/* The AddMemoryForm can be re-enabled if a storage solution is implemented */}
-                {/* <AddMemoryForm onAddMemory={handleAddMemory} /> */}
             </div>
-            {isLoading ? (
-              <div className="flex justify-center">
-                 <div className="overflow-hidden w-full max-w-lg">
-                    <div className="aspect-[9/16] bg-muted">
-                        <Skeleton className="w-full h-full" />
-                    </div>
-                </div>
-              </div>
-            ) : (
-              <PhotoGallery images={images} />
-            )}
+            <PhotoGallery images={images} />
           </section>
 
-          {/* Audio section is removed to prevent database errors */}
-          {/* <section className="my-16 animate-in fade-in delay-400 duration-700">
-             <h2 className="text-3xl sm:text-4xl font-headline mb-8">A Special Song</h2>
-             <AudioPlayer />
-          </section> */}
         </div>
       </main>
     </>
